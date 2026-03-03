@@ -1,0 +1,324 @@
+{%- assign question_blocks = section.blocks | where: 'type', 'question' -%}
+{%- assign result_blocks = section.blocks | where: 'type', 'result' -%}
+
+{%- if question_blocks.size > 0 and result_blocks.size > 0 -%}
+  {%- assign color_scheme_hash = section.settings.color_scheme.settings.background_gradient | default: section.settings.color_scheme.settings.background | md5 -%}
+
+  <div
+    class="section-spacing color-scheme color-scheme--{{ section.settings.color_scheme.id }} color-scheme--bg-{{ color_scheme_hash }}"
+    id="pergola-quiz-{{ section.id }}"
+    data-pergola-quiz
+  >
+    <div class="container container--sm">
+      <div class="section-stack gap-8">
+
+        <div class="v-stack gap-4 text-center">
+          {%- if section.settings.subheading != blank -%}
+            <p class="h6">{{ section.settings.subheading }}</p>
+          {%- endif -%}
+          {%- if section.settings.heading != blank -%}
+            <h1 class="h2">{{ section.settings.heading }}</h1>
+          {%- endif -%}
+        </div>
+
+        {%- comment -%} Quiz data for JS {%- endcomment -%}
+        <script type="application/json" data-pergola-quiz-config>
+          {
+            "questions": [
+              {%- for block in question_blocks -%}
+                {
+                  "id": "{{ block.id }}",
+                  "text": {{ block.settings.question | json }},
+                  "options": [
+                    {%- if block.settings.option_1_label != blank -%}
+                      { "label": {{ block.settings.option_1_label | json }}, "result": {{ block.settings.option_1_result | default: '' | json }} }
+                    {%- endif -%}
+                    {%- if block.settings.option_2_label != blank -%}
+                      {%- if block.settings.option_1_label != blank -%},{%- endif -%}
+                      { "label": {{ block.settings.option_2_label | json }}, "result": {{ block.settings.option_2_result | default: '' | json }} }
+                    {%- endif -%}
+                    {%- if block.settings.option_3_label != blank -%}
+                      {%- if block.settings.option_1_label != blank or block.settings.option_2_label != blank -%},{%- endif -%}
+                      { "label": {{ block.settings.option_3_label | json }}, "result": {{ block.settings.option_3_result | default: '' | json }} }
+                    {%- endif -%}
+                    {%- if block.settings.option_4_label != blank -%}
+                      {%- if block.settings.option_1_label != blank or block.settings.option_2_label != blank or block.settings.option_3_label != blank -%},{%- endif -%}
+                      { "label": {{ block.settings.option_4_label | json }}, "result": {{ block.settings.option_4_result | default: '' | json }} }
+                    {%- endif -%}
+                  ]
+                }{% unless forloop.last %},{% endunless %}
+              {%- endfor -%}
+            ],
+            "results": {
+              {%- for block in result_blocks -%}
+                {{ block.settings.result_id | json }}: {
+                  "heading": {{ block.settings.heading | json }},
+                  "description": {{ block.settings.description | json }},
+                  "collectionUrl": {{ block.settings.collection.url | default: '' | json }},
+                  "collectionTitle": {{ block.settings.collection.title | default: 'View options' | json }}
+                }{% unless forloop.last %},{% endunless %}
+              {%- endfor -%}
+            }
+          }
+        </script>
+
+        <div data-pergola-quiz-questions class="v-stack gap-6">
+          {%- for block in question_blocks -%}
+            <div data-pergola-quiz-step class="pergola-quiz__step v-stack gap-4" data-step="{{ forloop.index0 }}" {{ block.shopify_attributes }}>
+              <p class="h4">{{ block.settings.question }}</p>
+              <div class="v-stack gap-3">
+                {%- if block.settings.option_1_label != blank -%}
+                  <button type="button" class="button button--full-width" data-pergola-quiz-option data-result="{{ block.settings.option_1_result | escape }}">
+                    {{ block.settings.option_1_label }}
+                  </button>
+                {%- endif -%}
+                {%- if block.settings.option_2_label != blank -%}
+                  <button type="button" class="button button--full-width" data-pergola-quiz-option data-result="{{ block.settings.option_2_result | escape }}">
+                    {{ block.settings.option_2_label }}
+                  </button>
+                {%- endif -%}
+                {%- if block.settings.option_3_label != blank -%}
+                  <button type="button" class="button button--full-width" data-pergola-quiz-option data-result="{{ block.settings.option_3_result | escape }}">
+                    {{ block.settings.option_3_label }}
+                  </button>
+                {%- endif -%}
+                {%- if block.settings.option_4_label != blank -%}
+                  <button type="button" class="button button--full-width" data-pergola-quiz-option data-result="{{ block.settings.option_4_result | escape }}">
+                    {{ block.settings.option_4_label }}
+                  </button>
+                {%- endif -%}
+              </div>
+            </div>
+          {%- endfor -%}
+        </div>
+
+        <div data-pergola-quiz-result class="pergola-quiz__result v-stack gap-6 text-center" hidden>
+          <div class="v-stack gap-2">
+            <h2 class="h3" data-pergola-quiz-result-heading></h2>
+            <div class="prose" data-pergola-quiz-result-description></div>
+          </div>
+          <a href="#" class="button" data-pergola-quiz-result-cta>View recommended pergolas</a>
+        </div>
+
+        <div class="pergola-quiz__nav v-stack gap-3" data-pergola-quiz-nav hidden>
+          <button type="button" class="button button--outline" data-pergola-quiz-back>Back</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function() {
+      const section = document.querySelector('#pergola-quiz-{{ section.id }}');
+      if (!section) return;
+
+      const configEl = section.querySelector('[data-pergola-quiz-config]');
+      const config = configEl ? JSON.parse(configEl.textContent) : { questions: [], results: {} };
+      const steps = section.querySelectorAll('[data-pergola-quiz-step]');
+      const resultEl = section.querySelector('[data-pergola-quiz-result]');
+      const resultHeading = section.querySelector('[data-pergola-quiz-result-heading]');
+      const resultDescription = section.querySelector('[data-pergola-quiz-result-description]');
+      const resultCta = section.querySelector('[data-pergola-quiz-result-cta]');
+      const navEl = section.querySelector('[data-pergola-quiz-nav]');
+      const backBtn = section.querySelector('[data-pergola-quiz-back]');
+
+      let currentStep = 0;
+      const answers = [];
+
+      function showStep(index) {
+        steps.forEach((el, i) => el.hidden = i !== index);
+        currentStep = index;
+        resultEl.hidden = true;
+        navEl.hidden = index === 0;
+      }
+
+      function showResult(resultId) {
+        steps.forEach(el => el.hidden = true);
+        navEl.hidden = true;
+        const result = config.results[resultId];
+        if (result) {
+          resultHeading.textContent = result.heading || 'Your match';
+          resultDescription.innerHTML = result.description || '';
+          resultCta.href = result.collectionUrl || '/collections/pergolas';
+          resultCta.textContent = result.collectionTitle || 'View recommended pergolas';
+        }
+        resultEl.hidden = false;
+      }
+
+      function pickResult() {
+        const counts = {};
+        answers.forEach(r => { counts[r] = (counts[r] || 0) + 1; });
+        const winner = Object.entries(counts).sort((a, b) => b[1] - a[1])[0];
+        return winner ? winner[0] : Object.keys(config.results)[0];
+      }
+
+      section.querySelectorAll('[data-pergola-quiz-option]').forEach(btn => {
+        btn.addEventListener('click', function() {
+          const result = this.getAttribute('data-result');
+          if (result) answers.push(result);
+
+          if (currentStep < steps.length - 1) {
+            showStep(currentStep + 1);
+          } else {
+            showResult(pickResult());
+          }
+        });
+      });
+
+      backBtn.addEventListener('click', function() {
+        answers.pop();
+        showStep(currentStep - 1);
+      });
+
+      showStep(0);
+    })();
+  </script>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Pergola quiz",
+  "class": "shopify-section--pergola-quiz",
+  "tag": "section",
+  "disabled_on": { "groups": ["header", "footer", "custom.overlay"] },
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "Find your fit"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Which pergola is right for your space?"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "question",
+      "name": "Question",
+      "settings": [
+        {
+          "type": "text",
+          "id": "question",
+          "label": "Question"
+        },
+        {
+          "type": "header",
+          "content": "Option 1"
+        },
+        { "type": "text", "id": "option_1_label", "label": "Label" },
+        { "type": "text", "id": "option_1_result", "label": "Result ID (must match a Result block)" },
+        {
+          "type": "header",
+          "content": "Option 2"
+        },
+        { "type": "text", "id": "option_2_label", "label": "Label" },
+        { "type": "text", "id": "option_2_result", "label": "Result ID" },
+        {
+          "type": "header",
+          "content": "Option 3"
+        },
+        { "type": "text", "id": "option_3_label", "label": "Label" },
+        { "type": "text", "id": "option_3_result", "label": "Result ID" },
+        {
+          "type": "header",
+          "content": "Option 4"
+        },
+        { "type": "text", "id": "option_4_label", "label": "Label" },
+        { "type": "text", "id": "option_4_result", "label": "Result ID" }
+      ]
+    },
+    {
+      "type": "result",
+      "name": "Result",
+      "settings": [
+        {
+          "type": "text",
+          "id": "result_id",
+          "label": "Result ID",
+          "info": "Use this exact ID in question options (e.g. compact, large)"
+        },
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading"
+        },
+        {
+          "type": "richtext",
+          "id": "description",
+          "label": "Description"
+        },
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Collection to link to"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Pergola quiz",
+      "blocks": [
+        {
+          "type": "question",
+          "settings": {
+            "question": "What's the main use for your space?",
+            "option_1_label": "Dining & entertaining",
+            "option_1_result": "large",
+            "option_2_label": "Lounging & relaxation",
+            "option_2_result": "compact",
+            "option_3_label": "A bit of both",
+            "option_3_result": "medium"
+          }
+        },
+        {
+          "type": "question",
+          "settings": {
+            "question": "Roughly how much space do you have?",
+            "option_1_label": "Small patio or balcony",
+            "option_1_result": "compact",
+            "option_2_label": "Medium deck or yard",
+            "option_2_result": "medium",
+            "option_3_label": "Large outdoor area",
+            "option_3_result": "large"
+          }
+        },
+        {
+          "type": "result",
+          "settings": {
+            "result_id": "compact",
+            "heading": "Compact pergolas",
+            "description": "<p>Great for smaller spaces. Cozy and low-maintenance.</p>"
+          }
+        },
+        {
+          "type": "result",
+          "settings": {
+            "result_id": "medium",
+            "heading": "Mid-size pergolas",
+            "description": "<p>Versatile options that work in most yards.</p>"
+          }
+        },
+        {
+          "type": "result",
+          "settings": {
+            "result_id": "large",
+            "heading": "Large pergolas",
+            "description": "<p>Ideal for big gatherings and full outdoor rooms.</p>"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
