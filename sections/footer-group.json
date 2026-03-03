@@ -1,0 +1,73 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "type": "footer",
+  "name": "Footer group",
+  "sections": {
+    "footer": {
+      "type": "footer",
+      "blocks": {
+        "newsletter": {
+          "type": "newsletter",
+          "settings": {
+            "title": "<strong>THE BACKYARD NESTS INNER CIRCLE</strong>",
+            "content": "<p>Be the first to discover curated outdoor living collections, private invitations, and expert insights for creating your ultimate backyard sanctuary.</p>",
+            "button_background": "",
+            "button_text_color": ""
+          }
+        },
+        "links_YPgTLF": {
+          "type": "links",
+          "settings": {
+            "menu": "main-menu",
+            "show_menu_title": true,
+            "menu_title": "<strong>main menu</strong>"
+          }
+        },
+        "links": {
+          "type": "links",
+          "settings": {
+            "menu": "customer-support",
+            "show_menu_title": true,
+            "menu_title": "<strong>customer support</strong>"
+          }
+        },
+        "text": {
+          "type": "text",
+          "settings": {
+            "title": "<strong>BUSINESS CONTACT INFORMATION</strong>",
+            "content": "<p><strong>Phone Number:</strong><br/><a href=\"tel:1-833-962-0833\" title=\"tel:1-833-962-0833\">1-833-962-0833</a><br/><strong><br/>Emai</strong>l:<br/><a href=\"mailto:support@backyardnests.com\" title=\"mailto:support@backyardnests.com\">support@backyardnests.com</a><br/><br/><strong>Business Name:</strong><br/>Backyard Nests<br/><br/><strong>Address:</strong><br/>1500 N Grant St, Ste R, Denver, CO 80203, United States<br/><br/><strong>Working Hours:</strong><br/>MON - FRI 9AM to 5PM EST</p>",
+            "enable_follow_on_shop": true
+          }
+        }
+      },
+      "block_order": [
+        "newsletter",
+        "links_YPgTLF",
+        "links",
+        "text"
+      ],
+      "settings": {
+        "color_scheme": "scheme-3",
+        "separate_section_with_border": false,
+        "show_social_media": true,
+        "show_payment_icons": true,
+        "show_powered_by_shopify": true,
+        "show_country_selector": true,
+        "show_country_name": true,
+        "show_country_flag": true,
+        "show_locale_selector": true
+      }
+    }
+  },
+  "order": [
+    "footer"
+  ]
+}

@@ -1,0 +1,148 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "main-page",
+      "disabled": true,
+      "settings": {
+        "color_scheme": "",
+        "show_title": true,
+        "page_width": "xs"
+      }
+    },
+    "rich_text_8tYY7Y": {
+      "type": "rich-text",
+      "blocks": {
+        "heading_gqMKaM": {
+          "type": "heading",
+          "settings": {
+            "text": "<strong>GET TO KNOW US BETTER</strong>",
+            "heading_tag": "h1"
+          }
+        }
+      },
+      "block_order": [
+        "heading_gqMKaM"
+      ],
+      "name": "t:sections.rich_text.presets.rich_text.name",
+      "settings": {
+        "color_scheme": "",
+        "separate_section_with_border": true,
+        "content_width": "sm",
+        "text_position": "center",
+        "remove_vertical_spacing": false
+      }
+    },
+    "rich_text_qFcmQY": {
+      "type": "rich-text",
+      "blocks": {
+        "heading_LVmdbt": {
+          "type": "heading",
+          "settings": {
+            "text": "<strong>Our Belief: The Backyard Is Where Life Happens</strong>",
+            "heading_tag": "h3"
+          }
+        },
+        "richtext_LczwUP": {
+          "type": "richtext",
+          "settings": {
+            "content": "<p>At Backyard Nests, we believe the backyard is more than extra square footage , it is where families reconnect, friends linger longer, and the best memories are made without screens or schedules. It’s where birthdays stretch into warm evenings, championship games are celebrated under open skies, and quiet mornings begin with intention. We exist to help homeowners transform ordinary outdoor spaces into meaningful destinations that reflect the quality and care they bring to the rest of their home.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "heading_LVmdbt",
+        "richtext_LczwUP"
+      ],
+      "name": "t:sections.rich_text.presets.rich_text.name",
+      "settings": {
+        "color_scheme": "",
+        "separate_section_with_border": true,
+        "content_width": "xs",
+        "text_position": "center",
+        "remove_vertical_spacing": false
+      }
+    },
+    "image_with_text_overlay_RtTCYG": {
+      "type": "image-with-text-overlay",
+      "blocks": {
+        "heading_QPwGfh": {
+          "type": "heading",
+          "settings": {
+            "text": "<strong>What We Curate: The Complete Outdoor Experience</strong>",
+            "heading_tag": "h3"
+          }
+        },
+        "richtext_j6fydK": {
+          "type": "richtext",
+          "settings": {
+            "content": "<p>We don’t simply sell products, we curate a complete lifestyle ecosystem designed for connection, comfort, and performance. From architectural structures that define your space, to elevated lounging, outdoor culinary experiences, immersive entertainment, and active backyard play, every piece in our collection is selected for its durability, sophistication, and ability to elevate how you live. Our focus is simple: professional-grade quality that feels refined enough to complement luxury residential design.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "heading_QPwGfh",
+        "richtext_j6fydK"
+      ],
+      "name": "t:sections.image_with_text_overlay.presets.image_with_text_overlay.name",
+      "settings": {
+        "color_scheme": "",
+        "image_size": "md",
+        "image": "shopify://shop_images/20260223_1926_Image_Generation_simple_compose_01kj53zbf7eqwa1rrvv5vq4r30.png",
+        "allow_transparent_header": false,
+        "reveal_on_scroll": true,
+        "remove_vertical_spacing": true,
+        "content_width": "xs",
+        "mobile_text_position": "place-self-center text-center",
+        "desktop_text_position": "sm:place-self-center sm:text-center",
+        "overlay_color": "#000000",
+        "overlay_opacity": 61
+      }
+    },
+    "rich_text_N83HMG": {
+      "type": "rich-text",
+      "blocks": {
+        "heading_VU3iLR": {
+          "type": "heading",
+          "settings": {
+            "text": "<strong>Our Commitment: Confidence in Every Investment</strong>",
+            "heading_tag": "h3"
+          }
+        },
+        "richtext_nj3ndF": {
+          "type": "richtext",
+          "settings": {
+            "content": "<p>We understand that investing in your backyard is a meaningful decision. That’s why we prioritize quality craftsmanship, transparent communication, expert guidance, and long-term value in everything we offer. Our team is here to support you through specifications, layout planning, shipping, financing, and installation, so you can move forward with clarity and confidence. At Backyard Nests, we are committed to helping you build a space that not only looks exceptional, but feels exceptional for years to come.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "heading_VU3iLR",
+        "richtext_nj3ndF"
+      ],
+      "name": "t:sections.rich_text.presets.rich_text.name",
+      "settings": {
+        "color_scheme": "",
+        "separate_section_with_border": true,
+        "content_width": "xs",
+        "text_position": "center",
+        "remove_vertical_spacing": false
+      }
+    }
+  },
+  "order": [
+    "main",
+    "rich_text_8tYY7Y",
+    "rich_text_qFcmQY",
+    "image_with_text_overlay_RtTCYG",
+    "rich_text_N83HMG"
+  ]
+}

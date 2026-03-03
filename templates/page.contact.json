@@ -1,0 +1,36 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "main-page",
+      "disabled": true,
+      "settings": {
+        "color_scheme": "",
+        "show_title": true,
+        "page_width": "xs"
+      }
+    },
+    "contact-form": {
+      "type": "contact",
+      "settings": {
+        "color_scheme": "",
+        "separate_section_with_border": true,
+        "subheading": "<strong>NEED HELP?</strong>",
+        "title": "<strong>REACH OUT TO OUR SUPPORT TEAM!</strong>",
+        "content": "<p>At Backyard Nests, we believe creating your ultimate outdoor sanctuary should feel exciting, not overwhelming. Whether you have questions about product specifications, design compatibility, shipping timelines, financing options, or installation guidance, our expert team is here to provide clear, personalized support every step of the way. We’re committed to helping you make confident decisions so your investment delivers lasting beauty, performance, and unforgettable memories. </p><p><strong>Phone Number:</strong><br/><a href=\"tel:1-833-962-0833\" title=\"tel:1-833-962-0833\">1-833-962-0833</a><br/><strong><br/>Emai</strong>l:<br/><a href=\"mailto:support@backyardnests.com\" title=\"mailto:support@backyardnests.com\">support@backyardnests.com</a><br/><br/><strong>Business Name:</strong><br/>Backyard Nests<br/><br/><strong>Address:</strong><br/>1500 N Grant St, Ste R, Denver, CO 80203, United States<br/><br/><strong>Working Hours:</strong><br/>MON - FRI 9AM to 5PM EST</p>"
+      }
+    }
+  },
+  "order": [
+    "main",
+    "contact-form"
+  ]
+}
