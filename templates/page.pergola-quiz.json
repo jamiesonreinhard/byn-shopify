@@ -1,0 +1,70 @@
+{
+  "sections": {
+    "main": {
+      "type": "pergola-quiz",
+      "settings": {
+        "color_scheme": "scheme-1",
+        "subheading": "Find your fit",
+        "heading": "Which pergola is right for your space?"
+      },
+      "blocks": {
+        "question_1": {
+          "type": "question",
+          "settings": {
+            "question": "What's the main use for your space?",
+            "option_1_label": "Dining & entertaining",
+            "option_1_result": "large",
+            "option_2_label": "Lounging & relaxation",
+            "option_2_result": "compact",
+            "option_3_label": "A bit of both",
+            "option_3_result": "medium"
+          }
+        },
+        "question_2": {
+          "type": "question",
+          "settings": {
+            "question": "Roughly how much space do you have?",
+            "option_1_label": "Small patio or balcony",
+            "option_1_result": "compact",
+            "option_2_label": "Medium deck or yard",
+            "option_2_result": "medium",
+            "option_3_label": "Large outdoor area",
+            "option_3_result": "large"
+          }
+        },
+        "result_compact": {
+          "type": "result",
+          "settings": {
+            "result_id": "compact",
+            "heading": "Compact pergolas",
+            "description": "<p>Great for smaller spaces. Cozy and low-maintenance.</p>"
+          }
+        },
+        "result_medium": {
+          "type": "result",
+          "settings": {
+            "result_id": "medium",
+            "heading": "Mid-size pergolas",
+            "description": "<p>Versatile options that work in most yards.</p>"
+          }
+        },
+        "result_large": {
+          "type": "result",
+          "settings": {
+            "result_id": "large",
+            "heading": "Large pergolas",
+            "description": "<p>Ideal for big gatherings and full outdoor rooms.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "question_1",
+        "question_2",
+        "result_compact",
+        "result_medium",
+        "result_large"
+      ]
+    }
+  },
+  "order": ["main"]
+}
