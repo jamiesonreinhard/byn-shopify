@@ -29,23 +29,7 @@
                 {
                   "id": "{{ block.id }}",
                   "text": {{ block.settings.question | json }},
-                  "options": [
-                    {%- if block.settings.option_1_label != blank -%}
-                      { "label": {{ block.settings.option_1_label | json }}, "result": {{ block.settings.option_1_result | default: '' | json }} }
-                    {%- endif -%}
-                    {%- if block.settings.option_2_label != blank -%}
-                      {%- if block.settings.option_1_label != blank -%},{%- endif -%}
-                      { "label": {{ block.settings.option_2_label | json }}, "result": {{ block.settings.option_2_result | default: '' | json }} }
-                    {%- endif -%}
-                    {%- if block.settings.option_3_label != blank -%}
-                      {%- if block.settings.option_1_label != blank or block.settings.option_2_label != blank -%},{%- endif -%}
-                      { "label": {{ block.settings.option_3_label | json }}, "result": {{ block.settings.option_3_result | default: '' | json }} }
-                    {%- endif -%}
-                    {%- if block.settings.option_4_label != blank -%}
-                      {%- if block.settings.option_1_label != blank or block.settings.option_2_label != blank or block.settings.option_3_label != blank -%},{%- endif -%}
-                      { "label": {{ block.settings.option_4_label | json }}, "result": {{ block.settings.option_4_result | default: '' | json }} }
-                    {%- endif -%}
-                  ]
+                  "options": []
                 }{% unless forloop.last %},{% endunless %}
               {%- endfor -%}
             ],
