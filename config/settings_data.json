@@ -22,7 +22,9 @@
     "text_font": "inter_n4",
     "text_font_size_desktop": 14,
     "button_letter_spacing": 18,
-    "favicon": "shopify://shop_images/ChatGPT_Image_Feb_23_2026_07_12_59_PM_1_1.png",
+    "round_color_swatches": true,
+    "show_vendor": false,
+    "favicon": "shopify://shop_images/new_favicon.png",
     "sections": {
       "main-gift-card": {
         "type": "main-gift-card",
@@ -36,6 +38,21 @@
     "blocks": {
       "14060646107696862457": {
         "type": "shopify://apps/judge-me-reviews/blocks/judgeme_core/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
+        "disabled": false,
+        "settings": {}
+      },
+      "855628211100114053": {
+        "type": "shopify://apps/klaviyo-email-marketing-sms/blocks/klaviyo-onsite-embed/2632fe16-c075-4321-a88b-50b567f42507",
+        "disabled": false,
+        "settings": {}
+      },
+      "14327677521557774844": {
+        "type": "shopify://apps/simprosys-google-shopping-feed/blocks/core_settings_block/1f0b859e-9fa6-4007-97e8-4513aff5ff3b",
+        "disabled": false,
+        "settings": {}
+      },
+      "11082817785457682960": {
+        "type": "shopify://apps/chatra-live-chat-chatbot/blocks/widget/3617185a-5880-4550-b1d3-81cdb9d37290",
         "disabled": false,
         "settings": {}
       }

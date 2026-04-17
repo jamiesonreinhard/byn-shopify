@@ -1,3 +1,12 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "newsletter": {
@@ -97,8 +106,8 @@
             "icon": "picto-delivery-truck",
             "icon_width": 32,
             "mobile_icon_width": 24,
-            "title": "<strong>Free shipping</strong>",
-            "content": "<p>Free shipping and returns</p>"
+            "title": "<strong>Free USA shipping</strong>",
+            "content": "<p>Free USA shipping.</p>"
           }
         },
         "item_ky6EDT": {
@@ -377,7 +386,7 @@
           "type": "question",
           "settings": {
             "question": "Do you offer free shipping?",
-            "answer": "<p>Yes! We provide free shipping on most orders within the continental U.S. Certain exclusions may apply depending on the brand or delivery location.</p>"
+            "answer": "<p>Yes! We provide free shipping within the continental U.S.</p>"
           }
         },
         "question_pJcWmj": {
@@ -390,23 +399,15 @@
         "question_CnMhQj": {
           "type": "question",
           "settings": {
-            "question": "How do I know which pergola or smart tv fits my space?",
+            "question": "How do I know which Pergola or Smart TV fits my space?",
             "answer": "<p>Each product listing includes detailed specs and dimensions. If you need help, our support team is happy to guide you through measurements and fit questions.</p>"
-          }
-        },
-        "question_ftkEfb": {
-          "type": "question",
-          "settings": {
-            "question": "Do you offer price matching?",
-            "answer": "<p>Yes, if you find a lower price from an authorized retailer, let us know, we'll do our best to match it.</p>"
           }
         }
       },
       "block_order": [
         "question_4aYB4J",
         "question_pJcWmj",
-        "question_CnMhQj",
-        "question_ftkEfb"
+        "question_CnMhQj"
       ],
       "name": "t:sections.faq.presets.faq.name",
       "settings": {
