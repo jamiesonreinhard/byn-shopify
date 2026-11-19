@@ -1,0 +1,151 @@
+{%- assign pergola_url = section.settings.cta_url | default: 'https://byn-studio.vercel.app/pergola' -%}
+
+<style>
+  #shopify-section-{{ section.id }} .byn-pergola-cta {
+    margin: 0 auto;
+    max-width: var(--page-width, 1400px);
+    padding: clamp(1.5rem, 3vw, 2.5rem) var(--container-gutter, 1.5rem);
+  }
+  #shopify-section-{{ section.id }} .byn-pergola-cta__card {
+    display: grid;
+    gap: 1.5rem;
+    align-items: center;
+    background: linear-gradient(135deg, #1c1c1c 0%, #2a2520 55%, #3d342c 100%);
+    border-radius: 0.5rem;
+    color: #f7f3ee;
+    overflow: hidden;
+    padding: clamp(1.75rem, 4vw, 3rem);
+  }
+  @media screen and (min-width: 900px) {
+    #shopify-section-{{ section.id }} .byn-pergola-cta__card {
+      grid-template-columns: 1.2fr 0.8fr;
+    }
+  }
+  #shopify-section-{{ section.id }} .byn-pergola-cta__eyebrow {
+    font-size: 0.68rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    opacity: 0.75;
+    margin: 0 0 0.75rem;
+  }
+  #shopify-section-{{ section.id }} .byn-pergola-cta__title {
+    font-size: clamp(1.5rem, 3vw, 2.25rem);
+    line-height: 1.15;
+    margin: 0 0 1rem;
+  }
+  #shopify-section-{{ section.id }} .byn-pergola-cta__copy {
+    margin: 0 0 1.5rem;
+    max-width: 42ch;
+    opacity: 0.9;
+  }
+  #shopify-section-{{ section.id }} .byn-pergola-cta__btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: #eed9c4;
+    color: #1c1c1c;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    padding: 0.95rem 1.5rem;
+    text-decoration: none;
+    text-transform: uppercase;
+  }
+  #shopify-section-{{ section.id }} .byn-pergola-cta__list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    gap: 0.65rem;
+    font-size: 0.92rem;
+  }
+  #shopify-section-{{ section.id }} .byn-pergola-cta__list li::before {
+    content: "—";
+    margin-right: 0.5rem;
+    opacity: 0.5;
+  }
+</style>
+
+<div class="byn-pergola-cta color-scheme color-scheme--{{ section.settings.color_scheme.id }}">
+  <div class="byn-pergola-cta__card">
+    <div>
+      {%- if section.settings.eyebrow != blank -%}
+        <p class="byn-pergola-cta__eyebrow">{{ section.settings.eyebrow }}</p>
+      {%- endif -%}
+      {%- if section.settings.title != blank -%}
+        <h2 class="byn-pergola-cta__title">{{ section.settings.title }}</h2>
+      {%- endif -%}
+      {%- if section.settings.content != blank -%}
+        <div class="byn-pergola-cta__copy">{{ section.settings.content }}</div>
+      {%- endif -%}
+      <a href="{{ pergola_url }}" class="byn-pergola-cta__btn">{{ section.settings.button_text }}</a>
+    </div>
+    {%- if section.settings.bullets != blank -%}
+      <ul class="byn-pergola-cta__list">
+        {%- assign bullets = section.settings.bullets | newline_to_br | split: '<br />' -%}
+        {%- for bullet in bullets -%}
+          {%- assign line = bullet | strip -%}
+          {%- if line != blank -%}
+            <li>{{ line }}</li>
+          {%- endif -%}
+        {%- endfor -%}
+      </ul>
+    {%- endif -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "BYN Pergola CTA",
+  "tag": "section",
+  "class": "shopify-section--byn-pergola-cta",
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "Custom StruXure pergolas"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "Design a pergola built for your space — not a kit off the shelf."
+    },
+    {
+      "type": "richtext",
+      "id": "content",
+      "label": "Description",
+      "default": "<p>We partner with StruXure dealers to quote louvered pergolas tailored to your layout, finishes, and integration needs. Start with a quick design brief — no payment required.</p>"
+    },
+    {
+      "type": "textarea",
+      "id": "bullets",
+      "label": "Bullets (one per line)",
+      "default": "On-site measurement & install coordination\nMotorized louvers, lighting, and fan options\nExpert support from Backyard Nests"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button text",
+      "default": "Start your custom quote"
+    },
+    {
+      "type": "url",
+      "id": "cta_url",
+      "label": "Quote funnel URL"
+    }
+  ],
+  "presets": [
+    {
+      "name": "BYN Pergola CTA"
+    }
+  ]
+}
+{% endschema %}

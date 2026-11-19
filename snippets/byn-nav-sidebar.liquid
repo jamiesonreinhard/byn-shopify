@@ -1,0 +1,138 @@
+{%- comment -%}
+BYN curated mobile / drawer navigation. Mirrors header-sidebar structure with hardcoded links.
+{%- endcomment -%}
+{%- assign show_dividers = show_dividers | default: false -%}
+{%- assign open_second_level_menus = open_second_level_menus | default: false -%}
+
+<template id="header-sidebar-template">
+  <div part="base">
+    <div part="overlay"></div>
+    <div part="content">
+      <header part="header">
+        <dialog-close-button class="contents">
+          <button type="button" part="close-button tap-area" aria-label="{{ 'general.accessibility.close' | t | escape }}">
+            {%- render 'icon' with 'close', width: 16 -%}
+          </button>
+        </dialog-close-button>
+      </header>
+      <div part="panel-list">
+        <slot name="main-panel"></slot>
+        <slot name="collapsible-panel"></slot>
+      </div>
+    </div>
+  </div>
+</template>
+
+<header-sidebar id="sidebar-menu" class="header-sidebar drawer drawer--sm color-scheme color-scheme--{{ color_scheme.id }}" template="header-sidebar-template" open-from="left">
+  <div class="header-sidebar__main-panel" slot="main-panel">
+    <div class="header-sidebar__scroller">
+      <ul class="header-sidebar__linklist {% if show_dividers %}divide-y{% endif %} unstyled-list" role="list">
+        <li>
+          <button type="button" class="header-sidebar__linklist-button {% if section.settings.sidebar_text_font == 'heading' %}h6{% endif %}" aria-controls="header-panel-1" aria-expanded="false">
+            Shade &amp; Structure
+            {%- render 'icon' with 'chevron-right', width: 12, direction_aware: true -%}
+          </button>
+        </li>
+        <li>
+          <button type="button" class="header-sidebar__linklist-button {% if section.settings.sidebar_text_font == 'heading' %}h6{% endif %}" aria-controls="header-panel-2" aria-expanded="false">
+            Outdoor Living
+            {%- render 'icon' with 'chevron-right', width: 12, direction_aware: true -%}
+          </button>
+        </li>
+        <li>
+          <button type="button" class="header-sidebar__linklist-button {% if section.settings.sidebar_text_font == 'heading' %}h6{% endif %}" aria-controls="header-panel-3" aria-expanded="false">
+            Outdoor Cooking
+            {%- render 'icon' with 'chevron-right', width: 12, direction_aware: true -%}
+          </button>
+        </li>
+        <li>
+          <button type="button" class="header-sidebar__linklist-button {% if section.settings.sidebar_text_font == 'heading' %}h6{% endif %}" aria-controls="header-panel-4" aria-expanded="false">
+            Refined Recreation
+            {%- render 'icon' with 'chevron-right', width: 12, direction_aware: true -%}
+          </button>
+        </li>
+      </ul>
+    </div>
+
+    {%- liquid
+      if section.settings.show_country_selector and localization.available_countries.size > 1
+        assign show_country_selector = true
+      endif
+      if section.settings.show_locale_selector and localization.available_languages.size > 1
+        assign show_locale_selector = true
+      endif
+    -%}
+
+    {%- if shop.customer_accounts_enabled or show_country_selector or show_locale_selector -%}
+      <div class="header-sidebar__footer">
+        {%- if shop.customer_accounts_enabled -%}
+          <a href="{% if customer %}{{ routes.account_url }}{% else %}{{ routes.account_login_url }}{% endif %}" class="text-with-icon smallcaps sm:hidden">
+            {%- render 'icon' with 'account', width: 20 -%}
+            {%- if customer -%}{{- 'header.general.account' | t -}}{%- else -%}{{- 'header.general.login' | t -}}{%- endif -%}
+          </a>
+        {%- endif -%}
+        {%- if show_country_selector or show_locale_selector -%}
+          <div class="localization-selectors">
+            {%- if show_country_selector -%}
+              {%- render 'localization-selector', type: 'country', placement: 'top-start', show_country_name: section.settings.show_country_name, show_country_flag: section.settings.show_country_flag, id_prefix: 'header-sidebar' -%}
+            {%- endif -%}
+            {%- if show_country_selector and show_locale_selector -%}
+              <span class="localization-selectors__separator" aria-hidden="true"></span>
+            {%- endif -%}
+            {%- if show_locale_selector -%}
+              {%- render 'localization-selector', type: 'locale', placement: 'top-start', id_prefix: 'header-sidebar' -%}
+            {%- endif -%}
+          </div>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+  </div>
+
+  <header-sidebar-collapsible-panel class="header-sidebar__collapsible-panel" slot="collapsible-panel">
+    <div class="header-sidebar__scroller">
+      <div id="header-panel-1" class="header-sidebar__sub-panel" hidden>
+        <button type="button" class="header-sidebar__back-button link-faded {% if show_dividers %}is-divided{% endif %} text-with-icon {% if section.settings.sidebar_text_font == 'heading' %}h6{% endif %} md:hidden" data-action="close-panel">
+          {%- render 'icon' with 'chevron-left', width: 12, direction_aware: true -%}
+          Shade &amp; Structure
+        </button>
+        <ul class="header-sidebar__linklist {% if show_dividers %}divide-y{% endif %} unstyled-list" role="list">
+          <li><a href="/collections/umbrellas" class="header-sidebar__linklist-button {% if section.settings.sidebar_text_font == 'heading' %}h6{% endif %}">Umbrellas</a></li>
+          <li><a href="/collections/umbrella-bases" class="header-sidebar__linklist-button {% if section.settings.sidebar_text_font == 'heading' %}h6{% endif %}">Umbrella Bases</a></li>
+          <li><a href="/collections/pergolas" class="header-sidebar__linklist-button {% if section.settings.sidebar_text_font == 'heading' %}h6{% endif %}">Pergolas</a></li>
+        </ul>
+      </div>
+      <div id="header-panel-2" class="header-sidebar__sub-panel" hidden>
+        <button type="button" class="header-sidebar__back-button link-faded {% if show_dividers %}is-divided{% endif %} text-with-icon {% if section.settings.sidebar_text_font == 'heading' %}h6{% endif %} md:hidden" data-action="close-panel">
+          {%- render 'icon' with 'chevron-left', width: 12, direction_aware: true -%}
+          Outdoor Living
+        </button>
+        <ul class="header-sidebar__linklist {% if show_dividers %}divide-y{% endif %} unstyled-list" role="list">
+          <li><a href="/collections/seating-lounge" class="header-sidebar__linklist-button {% if section.settings.sidebar_text_font == 'heading' %}h6{% endif %}">Seating &amp; Lounge</a></li>
+          <li><a href="/collections/fire-tables" class="header-sidebar__linklist-button {% if section.settings.sidebar_text_font == 'heading' %}h6{% endif %}">Fire Tables</a></li>
+          <li><a href="/collections/outdoor-dining" class="header-sidebar__linklist-button {% if section.settings.sidebar_text_font == 'heading' %}h6{% endif %}">Outdoor Dining</a></li>
+          <li><a href="/collections/outdoor-living" class="header-sidebar__linklist-button {% if section.settings.sidebar_text_font == 'heading' %}h6{% endif %}">Shop All Outdoor Living</a></li>
+        </ul>
+      </div>
+      <div id="header-panel-3" class="header-sidebar__sub-panel" hidden>
+        <button type="button" class="header-sidebar__back-button link-faded {% if show_dividers %}is-divided{% endif %} text-with-icon {% if section.settings.sidebar_text_font == 'heading' %}h6{% endif %} md:hidden" data-action="close-panel">
+          {%- render 'icon' with 'chevron-left', width: 12, direction_aware: true -%}
+          Outdoor Cooking
+        </button>
+        <ul class="header-sidebar__linklist {% if show_dividers %}divide-y{% endif %} unstyled-list" role="list">
+          <li><a href="/collections/kamado-grills" class="header-sidebar__linklist-button {% if section.settings.sidebar_text_font == 'heading' %}h6{% endif %}">Kamado Grills</a></li>
+          <li><a href="/collections/outdoor-kitchens" class="header-sidebar__linklist-button {% if section.settings.sidebar_text_font == 'heading' %}h6{% endif %}">Outdoor Kitchens</a></li>
+        </ul>
+      <div id="header-panel-4" class="header-sidebar__sub-panel" hidden>
+        <button type="button" class="header-sidebar__back-button link-faded {% if show_dividers %}is-divided{% endif %} text-with-icon {% if section.settings.sidebar_text_font == 'heading' %}h6{% endif %} md:hidden" data-action="close-panel">
+          {%- render 'icon' with 'chevron-left', width: 12, direction_aware: true -%}
+          Refined Recreation
+        </button>
+        <ul class="header-sidebar__linklist {% if show_dividers %}divide-y{% endif %} unstyled-list" role="list">
+          <li><a href="/collections/game-tables" class="header-sidebar__linklist-button {% if section.settings.sidebar_text_font == 'heading' %}h6{% endif %}">Game Tables</a></li>
+          <li><a href="/collections/playgrounds" class="header-sidebar__linklist-button {% if section.settings.sidebar_text_font == 'heading' %}h6{% endif %}">Playgrounds &amp; Swing Sets</a></li>
+          <li><a href="/collections/refined-recreation" class="header-sidebar__linklist-button {% if section.settings.sidebar_text_font == 'heading' %}h6{% endif %}">Shop All Recreation</a></li>
+        </ul>
+      </div>
+    </div>
+  </header-sidebar-collapsible-panel>
+</header-sidebar>

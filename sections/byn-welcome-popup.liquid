@@ -1,0 +1,468 @@
+{%- comment -%}
+  Backyard Nests welcome popup — editorial hospitality aesthetic.
+  Posts to byn-studio /api/klaviyo/subscribe. Coupon: WELCOME100 ($100 / $2k+).
+{%- endcomment -%}
+
+{%- unless request.page_type == 'captcha' -%}
+  {%- if section.settings.hide_for_account_holders and customer -%}
+  {%- else -%}
+    {%- if section.settings.show_only_on_index == false or template.name == 'index' -%}
+      <newsletter-popup
+        id="BynWelcomePopup"
+        class="pop-in byn-welcome"
+        title="Welcome offer"
+        {% if section.settings.show_only_once %}only-once{% endif %}
+        apparition-delay="{{ section.settings.apparition_delay }}"
+        handle-editor-events
+      >
+        <dialog-close-button class="contents">
+          <button type="button" class="byn-welcome__close" aria-label="{{ 'general.accessibility.close' | t }}">
+            <span aria-hidden="true">×</span>
+          </button>
+        </dialog-close-button>
+
+        <div class="byn-welcome__panel" data-byn-welcome-root>
+          <div class="byn-welcome__visual" aria-hidden="true">
+            <div class="byn-welcome__visual-gradient"></div>
+            <p class="byn-welcome__mark">Backyard Nests</p>
+          </div>
+
+          <div class="byn-welcome__body">
+            <div data-byn-welcome-intro>
+              {%- if section.settings.eyebrow != blank -%}
+                <p class="byn-welcome__eyebrow">{{ section.settings.eyebrow }}</p>
+              {%- endif -%}
+              {%- if section.settings.title != blank -%}
+                <h2 class="byn-welcome__title">{{ section.settings.title }}</h2>
+              {%- endif -%}
+              {%- if section.settings.content != blank -%}
+                <div class="byn-welcome__copy">{{ section.settings.content }}</div>
+              {%- endif -%}
+            </div>
+
+            <form class="byn-welcome__form" data-byn-welcome-form novalidate>
+              <label class="sr-only" for="byn-welcome-email">Email</label>
+              <div class="byn-welcome__field-row">
+                <input
+                  id="byn-welcome-email"
+                  class="byn-welcome__input"
+                  type="email"
+                  name="email"
+                  autocomplete="email"
+                  required
+                  placeholder="{{ section.settings.email_placeholder | escape }}"
+                >
+                <button type="submit" class="byn-welcome__submit" data-byn-welcome-submit>
+                  {{ section.settings.button_text }}
+                </button>
+              </div>
+              <p class="byn-welcome__legal">{{ section.settings.legal_text }}</p>
+              <p class="byn-welcome__error" data-byn-welcome-error hidden></p>
+            </form>
+
+            <div class="byn-welcome__success" data-byn-welcome-success hidden>
+              <p class="byn-welcome__eyebrow">You're on the list</p>
+              <h2 class="byn-welcome__title">{{ section.settings.success_title }}</h2>
+              <p class="byn-welcome__copy" data-byn-welcome-success-copy>{{ section.settings.success_content }}</p>
+              <div class="byn-welcome__code-row">
+                <code class="byn-welcome__code" data-byn-welcome-code></code>
+                <button type="button" class="byn-welcome__copy-btn" data-byn-welcome-copy>Copy</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </newsletter-popup>
+
+      <script>
+        (function () {
+          var root = document.querySelector('[data-byn-welcome-root]');
+          if (!root || root.dataset.bound === '1') return;
+          root.dataset.bound = '1';
+
+          var form = root.querySelector('[data-byn-welcome-form]');
+          var errEl = root.querySelector('[data-byn-welcome-error]');
+          var success = root.querySelector('[data-byn-welcome-success]');
+          var intro = root.querySelector('[data-byn-welcome-intro]');
+          var codeEl = root.querySelector('[data-byn-welcome-code]');
+          var submitBtn = root.querySelector('[data-byn-welcome-submit]');
+          var copyBtn = root.querySelector('[data-byn-welcome-copy]');
+          var endpoint = {{ section.settings.subscribe_endpoint | json }};
+          var fallbackCode = {{ section.settings.coupon_code | json }};
+          var buttonLabel = {{ section.settings.button_text | json }};
+
+          function showError(msg) {
+            if (!errEl) return;
+            errEl.hidden = false;
+            errEl.textContent = msg;
+          }
+
+          form.addEventListener('submit', function (e) {
+            e.preventDefault();
+            errEl.hidden = true;
+            var email = (form.querySelector('[name="email"]').value || '').trim();
+            if (!email) {
+              showError('Enter your email to continue.');
+              return;
+            }
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'One moment…';
+
+            fetch(endpoint, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ email: email, source: 'byn-welcome-popup' }),
+            })
+              .then(function (res) {
+                return res.json().then(function (data) {
+                  return { ok: res.ok, data: data };
+                });
+              })
+              .then(function (result) {
+                if (!result.ok) {
+                  throw new Error((result.data && result.data.error) || 'Something went wrong. Try again.');
+                }
+                var code = (result.data && result.data.code) || fallbackCode;
+                codeEl.textContent = code;
+                form.hidden = true;
+                if (intro) intro.hidden = true;
+                success.hidden = false;
+                try {
+                  localStorage.setItem('theme:popup-filled', 'true');
+                  localStorage.setItem('byn:welcome-code', code);
+                } catch (err) {}
+              })
+              .catch(function (err) {
+                showError(err.message || 'Something went wrong. Try again.');
+                submitBtn.disabled = false;
+                submitBtn.textContent = buttonLabel;
+              });
+          });
+
+          if (copyBtn) {
+            copyBtn.addEventListener('click', function () {
+              var code = codeEl.textContent || '';
+              if (!code || !navigator.clipboard) return;
+              navigator.clipboard.writeText(code).then(function () {
+                copyBtn.textContent = 'Copied';
+                setTimeout(function () { copyBtn.textContent = 'Copy'; }, 1600);
+              });
+            });
+          }
+        })();
+      </script>
+
+      <style>
+        #BynWelcomePopup.byn-welcome {
+          --byn-ink: #0c1b2e;
+          --byn-gold: #c9a85c;
+          --byn-sand: #f3efe6;
+          --byn-mist: #e8e2d6;
+          width: min(92vw, 34rem);
+          max-width: 34rem;
+          padding: 0;
+          overflow: hidden;
+          border: 0;
+          border-radius: 2px;
+          background: var(--byn-sand);
+          color: var(--byn-ink);
+          box-shadow: 0 28px 80px rgba(12, 27, 46, 0.35);
+          font-family: Georgia, "Times New Roman", serif;
+          animation: bynWelcomeIn 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+        }
+
+        @keyframes bynWelcomeIn {
+          from { opacity: 0; transform: translateY(18px) scale(0.98); }
+          to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .byn-welcome__panel {
+          display: grid;
+        }
+
+        .byn-welcome__visual {
+          position: relative;
+          min-height: 7.5rem;
+          background:
+            radial-gradient(120% 140% at 10% 0%, rgba(201, 168, 92, 0.45), transparent 55%),
+            linear-gradient(145deg, #0c1b2e 0%, #1a3348 48%, #243b2e 100%);
+          overflow: hidden;
+        }
+
+        .byn-welcome__visual-gradient {
+          position: absolute;
+          inset: 0;
+          background-image:
+            linear-gradient(rgba(243, 239, 230, 0.05) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(243, 239, 230, 0.05) 1px, transparent 1px);
+          background-size: 22px 22px;
+          opacity: 0.5;
+          mask-image: linear-gradient(to bottom, black, transparent);
+        }
+
+        .byn-welcome__mark {
+          position: absolute;
+          left: 1.35rem;
+          bottom: 1.1rem;
+          margin: 0;
+          color: var(--byn-mist);
+          font-size: 0.68rem;
+          letter-spacing: 0.22em;
+          text-transform: uppercase;
+          font-family: system-ui, -apple-system, sans-serif;
+        }
+
+        .byn-welcome__close {
+          position: absolute;
+          top: 0.65rem;
+          right: 0.65rem;
+          z-index: 2;
+          width: 2.1rem;
+          height: 2.1rem;
+          border: 0;
+          border-radius: 999px;
+          background: rgba(243, 239, 230, 0.12);
+          color: #f3efe6;
+          font-size: 1.35rem;
+          line-height: 1;
+          cursor: pointer;
+          backdrop-filter: blur(6px);
+        }
+        .byn-welcome__close:hover { background: rgba(243, 239, 230, 0.22); }
+
+        .byn-welcome__body {
+          padding: 1.6rem 1.5rem 1.5rem;
+          display: grid;
+          gap: 1.1rem;
+        }
+
+        .byn-welcome__eyebrow {
+          margin: 0 0 0.45rem;
+          font-family: system-ui, -apple-system, sans-serif;
+          font-size: 0.68rem;
+          letter-spacing: 0.18em;
+          text-transform: uppercase;
+          color: #6b6458;
+        }
+
+        .byn-welcome__title {
+          margin: 0;
+          font-size: clamp(1.55rem, 3.5vw, 1.85rem);
+          font-weight: 500;
+          line-height: 1.2;
+          letter-spacing: -0.01em;
+          color: var(--byn-ink);
+        }
+
+        .byn-welcome__copy {
+          margin: 0.7rem 0 0;
+          font-family: system-ui, -apple-system, sans-serif;
+          font-size: 0.95rem;
+          line-height: 1.55;
+          color: #4a453c;
+        }
+        .byn-welcome__copy p { margin: 0; }
+
+        .byn-welcome__form { display: grid; gap: 0.65rem; }
+
+        .byn-welcome__field-row {
+          display: grid;
+          grid-template-columns: 1fr auto;
+          gap: 0.45rem;
+        }
+
+        .byn-welcome__input {
+          width: 100%;
+          border: 1px solid #d5cfc3;
+          background: #fff;
+          color: var(--byn-ink);
+          padding: 0.85rem 0.95rem;
+          font-size: 0.95rem;
+          font-family: system-ui, -apple-system, sans-serif;
+          border-radius: 2px;
+          outline: none;
+        }
+        .byn-welcome__input:focus {
+          border-color: var(--byn-ink);
+          box-shadow: 0 0 0 3px rgba(12, 27, 46, 0.12);
+        }
+
+        .byn-welcome__submit {
+          border: 0;
+          background: var(--byn-ink);
+          color: #f3efe6;
+          padding: 0.85rem 1.1rem;
+          font-family: system-ui, -apple-system, sans-serif;
+          font-size: 0.78rem;
+          font-weight: 600;
+          letter-spacing: 0.08em;
+          text-transform: uppercase;
+          border-radius: 2px;
+          cursor: pointer;
+          white-space: nowrap;
+          transition: background 0.2s ease, transform 0.15s ease;
+        }
+        .byn-welcome__submit:hover { background: #16304a; }
+        .byn-welcome__submit:disabled { opacity: 0.7; cursor: wait; }
+
+        .byn-welcome__legal {
+          margin: 0;
+          font-family: system-ui, -apple-system, sans-serif;
+          font-size: 0.72rem;
+          line-height: 1.45;
+          color: #7a7468;
+        }
+
+        .byn-welcome__error {
+          margin: 0;
+          font-family: system-ui, -apple-system, sans-serif;
+          font-size: 0.82rem;
+          color: #a33b3b;
+        }
+
+        .byn-welcome__success { display: grid; gap: 0.35rem; }
+        .byn-welcome__success[hidden] { display: none !important; }
+
+        .byn-welcome__code-row {
+          margin-top: 0.85rem;
+          display: flex;
+          gap: 0.55rem;
+          align-items: center;
+          flex-wrap: wrap;
+        }
+
+        .byn-welcome__code {
+          display: inline-block;
+          padding: 0.7rem 0.95rem;
+          background: #fff;
+          border: 1px dashed var(--byn-gold);
+          color: var(--byn-ink);
+          font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+          font-size: 1.05rem;
+          letter-spacing: 0.12em;
+          border-radius: 2px;
+        }
+
+        .byn-welcome__copy-btn {
+          border: 1px solid var(--byn-ink);
+          background: transparent;
+          color: var(--byn-ink);
+          padding: 0.65rem 0.9rem;
+          font-family: system-ui, -apple-system, sans-serif;
+          font-size: 0.72rem;
+          letter-spacing: 0.08em;
+          text-transform: uppercase;
+          cursor: pointer;
+          border-radius: 2px;
+        }
+        .byn-welcome__copy-btn:hover { background: var(--byn-ink); color: #f3efe6; }
+
+        @media (max-width: 600px) {
+          .byn-welcome__field-row { grid-template-columns: 1fr; }
+          .byn-welcome__submit { width: 100%; }
+        }
+      </style>
+    {%- endif -%}
+  {%- endif -%}
+{%- endunless -%}
+
+{% schema %}
+{
+  "name": "BYN Welcome Popup",
+  "class": "shopify-section--popup",
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Custom BYN popup → byn-studio Klaviyo subscribe. Use WELCOME100 ($100 off $2,000+)."
+    },
+    {
+      "type": "range",
+      "id": "apparition_delay",
+      "min": 0,
+      "max": 15,
+      "step": 1,
+      "unit": "sec",
+      "label": "Delay before showing",
+      "default": 7
+    },
+    {
+      "type": "checkbox",
+      "id": "show_only_on_index",
+      "label": "Show only on home page",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "hide_for_account_holders",
+      "label": "Hide for logged-in customers",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_only_once",
+      "label": "Show only once per browser",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "subscribe_endpoint",
+      "label": "Subscribe API URL",
+      "default": "https://byn-studio.vercel.app/api/klaviyo/subscribe"
+    },
+    {
+      "type": "text",
+      "id": "coupon_code",
+      "label": "Fallback coupon code",
+      "default": "WELCOME100"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "Welcome offer"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "title",
+      "label": "Heading",
+      "default": "$100 toward your outdoor setup"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "content",
+      "label": "Body",
+      "default": "Join for curated shade, seating, and recreation — plus first looks at new collections."
+    },
+    {
+      "type": "text",
+      "id": "email_placeholder",
+      "label": "Email placeholder",
+      "default": "you@email.com"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button text",
+      "default": "Get the code"
+    },
+    {
+      "type": "text",
+      "id": "legal_text",
+      "label": "Fine print",
+      "default": "$100 off orders $2,000+. Enter your email for the code. Unsubscribe anytime."
+    },
+    {
+      "type": "text",
+      "id": "success_title",
+      "label": "Success heading",
+      "default": "Your code is ready."
+    },
+    {
+      "type": "inline_richtext",
+      "id": "success_content",
+      "label": "Success body",
+      "default": "Use it at checkout. We'll send a short welcome note to your inbox as well."
+    }
+  ],
+  "presets": [{ "name": "BYN Welcome Popup" }]
+}
+{% endschema %}

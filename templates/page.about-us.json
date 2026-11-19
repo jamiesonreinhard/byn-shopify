@@ -41,26 +41,62 @@
         "remove_vertical_spacing": false
       }
     },
-    "rich_text_qFcmQY": {
-      "type": "rich-text",
+    "image_with_text_overlay_6XDCYM": {
+      "type": "image-with-text-overlay",
       "blocks": {
-        "heading_LVmdbt": {
+        "heading_ga4hQi": {
           "type": "heading",
           "settings": {
             "text": "<strong>Our Belief: The Backyard Is Where Life Happens</strong>",
             "heading_tag": "h3"
           }
         },
-        "richtext_LczwUP": {
+        "richtext_a3npyH": {
           "type": "richtext",
           "settings": {
-            "content": "<p>At Backyard Nests, we believe the backyard is more than extra square footage , it is where families reconnect, friends linger longer, and the best memories are made without screens or schedules. It’s where birthdays stretch into warm evenings, championship games are celebrated under open skies, and quiet mornings begin with intention. We exist to help homeowners transform ordinary outdoor spaces into meaningful destinations that reflect the quality and care they bring to the rest of their home.</p>"
+            "content": "<p>At Backyard Nests, we believe the backyard is more than extra square footage , it is where families reconnect, friends linger longer, and the best memories are made without schedules. It's where birthdays stretch into warm evenings, championship games are celebrated under open skies, and quiet mornings begin with intention. We exist to help homeowners transform ordinary outdoor spaces into meaningful destinations that reflect the quality and care they bring to the rest of their home.</p>"
           }
         }
       },
       "block_order": [
-        "heading_LVmdbt",
-        "richtext_LczwUP"
+        "heading_ga4hQi",
+        "richtext_a3npyH"
+      ],
+      "name": "t:sections.image_with_text_overlay.presets.image_with_text_overlay.name",
+      "settings": {
+        "color_scheme": "",
+        "image_size": "md",
+        "image": "shopify://shop_images/20260223_1948_Image_Generation_simple_compose_01kj557dkcftkamwkej1wewvky.png",
+        "allow_transparent_header": false,
+        "reveal_on_scroll": true,
+        "remove_vertical_spacing": true,
+        "content_width": "md",
+        "mobile_text_position": "place-self-center text-center",
+        "desktop_text_position": "sm:place-self-center sm:text-center",
+        "overlay_color": "#000000",
+        "overlay_opacity": 30
+      }
+    },
+    "rich_text_fUQPk6": {
+      "type": "rich-text",
+      "blocks": {
+        "heading_kREjAE": {
+          "type": "heading",
+          "settings": {
+            "text": "<strong>A Letter from our Founder</strong>",
+            "heading_tag": "h3"
+          }
+        },
+        "richtext_HFdEcx": {
+          "type": "richtext",
+          "settings": {
+            "content": "<p>Backyard Nests was born out of a simple observation: the care and quality we put into our indoor spaces often stops at the back door.</p><p>My name is Jamieson, and my professional background is in digital product leadership and luxury hospitality. I've spent my career building seamless digital experiences and managing high-touch service environments. I started Backyard Nests to bring those same standards to the outdoor industry.</p><p>I believe that buying a high-ticket item like a luxury pergola or a professional game table should be a transparent and supportive process. We use a product management mindset to ensure our technical data is accurate and our supplier relationships are strong. Our goal is to provide a curated digital showroom where quality is guaranteed and the customer experience is handled with the attention to detail it deserves.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "heading_kREjAE",
+        "richtext_HFdEcx"
       ],
       "name": "t:sections.rich_text.presets.rich_text.name",
       "settings": {
@@ -141,7 +177,8 @@
   "order": [
     "main",
     "rich_text_8tYY7Y",
-    "rich_text_qFcmQY",
+    "image_with_text_overlay_6XDCYM",
+    "rich_text_fUQPk6",
     "image_with_text_overlay_RtTCYG",
     "rich_text_N83HMG"
   ]

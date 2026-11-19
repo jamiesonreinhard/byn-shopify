@@ -2194,6 +2194,10 @@ model-media model-viewer, model-media .shopify-model-viewer-ui {
 .product-card__media {
   isolation: isolate;
   display: block;
+  position: relative;
+  width: 100%;
+  /* Force equal card heights so titles/prices align across mixed product shots */
+  aspect-ratio: 1 / 1;
 }
 
 .product-card__image {
@@ -2201,6 +2205,16 @@ model-media model-viewer, model-media .shopify-model-viewer-ui {
   object-position: center;
   margin-inline: auto;
   transition: opacity .1s ease-in-out;
+}
+
+.product-card__image--primary {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  inset: 0;
+  /* Container owns the square; ignore intrinsic image height (height: auto on img) */
+  aspect-ratio: auto;
+  max-width: none;
 }
 
 .product-card__image--secondary {
