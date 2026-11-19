@@ -22,4 +22,8 @@ fi
 
 echo "Pushing reviewed release to live theme $THEME on $STORE."
 
-shopify theme push --store "$STORE" --theme "$THEME" "$@"
+if [[ -n "${SHOPIFY_CLI_RUNNER:-}" ]]; then
+  "${SHOPIFY_NODE_BIN:-node}" "$SHOPIFY_CLI_RUNNER" theme push --store "$STORE" --theme "$THEME" "$@"
+else
+  shopify theme push --store "$STORE" --theme "$THEME" "$@"
+fi
