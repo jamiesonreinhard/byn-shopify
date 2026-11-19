@@ -1,0 +1,53 @@
+{%- comment -%}
+BYN curated primary navigation (desktop). Matches Prestige header dropdown markup.
+{%- endcomment -%}
+<ul class="contents unstyled-list md-max:hidden">
+  <li class="header__primary-nav-item">
+    <dropdown-menu-disclosure follow-summary-link trigger="{{ section.settings.menu_open_trigger }}">
+      <details class="header__menu-disclosure">
+        <summary data-follow-link="/collections/shade-structure" {% if section.settings.menu_text_font == 'heading' %}class="h6"{% endif %} data-title="Shade &amp; Structure">Shade &amp; Structure</summary>
+        <ul class="header__dropdown-menu header__dropdown-menu--restrictable unstyled-list" role="list">
+          <li><a href="/collections/umbrellas" class="link-faded-reverse">Umbrellas</a></li>
+          <li><a href="/collections/umbrella-bases" class="link-faded-reverse">Umbrella Bases</a></li>
+          <li><a href="/collections/pergolas" class="link-faded-reverse">Pergolas</a></li>
+        </ul>
+      </details>
+    </dropdown-menu-disclosure>
+  </li>
+  <li class="header__primary-nav-item">
+    <dropdown-menu-disclosure follow-summary-link trigger="{{ section.settings.menu_open_trigger }}">
+      <details class="header__menu-disclosure">
+        <summary data-follow-link="/collections/outdoor-living" {% if section.settings.menu_text_font == 'heading' %}class="h6"{% endif %} data-title="Outdoor Living">Outdoor Living</summary>
+        <ul class="header__dropdown-menu header__dropdown-menu--restrictable unstyled-list" role="list">
+          <li><a href="/collections/seating-lounge" class="link-faded-reverse">Seating &amp; Lounge</a></li>
+          <li><a href="/collections/fire-tables" class="link-faded-reverse">Fire Tables</a></li>
+          <li><a href="/collections/outdoor-dining" class="link-faded-reverse">Outdoor Dining</a></li>
+          <li><a href="/collections/outdoor-living" class="link-faded-reverse">Shop All Outdoor Living</a></li>
+        </ul>
+      </details>
+    </dropdown-menu-disclosure>
+  </li>
+  <li class="header__primary-nav-item">
+    <dropdown-menu-disclosure follow-summary-link trigger="{{ section.settings.menu_open_trigger }}">
+      <details class="header__menu-disclosure">
+        <summary data-follow-link="/collections/outdoor-cooking" {% if section.settings.menu_text_font == 'heading' %}class="h6"{% endif %} data-title="Outdoor Cooking">Outdoor Cooking</summary>
+        <ul class="header__dropdown-menu header__dropdown-menu--restrictable unstyled-list" role="list">
+          <li><a href="/collections/kamado-grills" class="link-faded-reverse">Kamado Grills</a></li>
+          <li><a href="/collections/outdoor-kitchens" class="link-faded-reverse">Outdoor Kitchens</a></li>
+        </ul>
+      </details>
+    </dropdown-menu-disclosure>
+  </li>
+  <li class="header__primary-nav-item">
+    <dropdown-menu-disclosure follow-summary-link trigger="{{ section.settings.menu_open_trigger }}">
+      <details class="header__menu-disclosure">
+        <summary data-follow-link="/collections/refined-recreation" {% if section.settings.menu_text_font == 'heading' %}class="h6"{% endif %} data-title="Refined Recreation">Refined Recreation</summary>
+        <ul class="header__dropdown-menu header__dropdown-menu--restrictable unstyled-list" role="list">
+          <li><a href="/collections/game-tables" class="link-faded-reverse">Game Tables</a></li>
+          <li><a href="/collections/playgrounds" class="link-faded-reverse">Playgrounds &amp; Swing Sets</a></li>
+          <li><a href="/collections/refined-recreation" class="link-faded-reverse">Shop All Recreation</a></li>
+        </ul>
+      </details>
+    </dropdown-menu-disclosure>
+  </li>
+</ul>

@@ -1,62 +1,99 @@
-<product-recommendations class="block" product="{{ product.id }}" limit="{{ section.settings.recommendations_count }}" intent="related">
+{%- comment -%}
+  Umbrella bases are Sol-only accessories. Shopify's related-product algo pairs them
+  with anything tagged Shade & Structure — hide them everywhere except Homecrest Sol umbrellas.
+  Bases still belong in complementary products on Sol PDPs (Search & Discovery), not here.
+{%- endcomment -%}
+{%- liquid
+  assign allow_umbrella_bases = false
+  if product.vendor == 'Homecrest' and product.type != 'Umbrella Base'
+    if product.tags contains 'Sol'
+      assign allow_umbrella_bases = true
+    endif
+  endif
+  assign related_max = section.settings.recommendations_count
+  assign related_fetch = related_max | plus: 6
+  if related_fetch > 10
+    assign related_fetch = 10
+  endif
+-%}
+<product-recommendations class="block" product="{{ product.id }}" limit="{{ related_fetch }}" intent="related">
   {%- if recommendations.performed and recommendations.products_count > 0 -%}
-    <style>
-      #shopify-section-{{ section.id }} {
-        --product-list-items-per-row: {{ section.settings.products_per_row_mobile | times: 1 }};
-        --product-list-horizontal-spacing-factor: {{ section.settings.horizontal_spacing_factor }};
-        --product-list-vertical-spacing-factor: {{ section.settings.vertical_spacing_factor }};
-      }
+    {%- assign related_shown = 0 -%}
 
-      @media screen and (min-width: 700px) {
-        #shopify-section-{{ section.id }} {
-          --product-list-items-per-row: {{ section.settings.products_per_row_desktop }};
-        }
-      }
-    </style>
-
-    {%- assign color_scheme_hash = section.settings.color_scheme.settings.background_gradient | default: section.settings.color_scheme.settings.background | md5 -%}
-
-    <div class="section-spacing color-scheme color-scheme--{{ section.settings.color_scheme.id }} color-scheme--bg-{{ color_scheme_hash }} {% if section.settings.separate_section_with_border %}bordered-section{% endif %}">
-      <div class="container">
-        <div class="section-stack">
-          {%- render 'section-header', subheading: section.settings.subheading, heading: section.settings.title, content: section.settings.content -%}
-
-          {%- capture product_list -%}
-            {%- for product in recommendations.products -%}
-              {%- render 'product-card', product: product, reveal: settings.stagger_products_apparition, position: forloop.index, hide_product_information: section.settings.hide_product_information -%}
-            {%- endfor -%}
-          {%- endcapture -%}
-
-          {%- if section.settings.stack_products -%}
-            <product-list class="product-list {% if section.settings.hide_product_information %}product-list--compact{% endif %} justify-center">
-              {{- product_list -}}
-            </product-list>
-          {%- else -%}
-            {%- assign carousel_id = 'carousel-' | append: section.id -%}
-
-            <product-list class="floating-controls-container floating-controls-container--inside floating-controls-container--on-hover">
-              <carousel-prev-button class="floating-controls-container__control" aria-controls="{{ carousel_id }}">
-                <button type="button" class="prev-next-button prev-next-button--prev circle-button hover:animate-icon-inline" disabled>
-                  <span class="sr-only">{{ 'general.accessibility.previous' | t }}</span>
-                  {%- render 'icon' with 'arrow-left', direction_aware: true -%}
-                </button>
-              </carousel-prev-button>
-
-              <scroll-carousel id="{{ carousel_id }}" group-cells allow-drag class="product-list {% if section.settings.hide_product_information %}product-list--compact{% endif %} product-list--carousel scroll-area bleed md:unbleed">
-                {{- product_list -}}
-              </scroll-carousel>
-
-              <carousel-next-button class="floating-controls-container__control" aria-controls="{{ carousel_id }}">
-                <button type="button" class="prev-next-button prev-next-button--next circle-button hover:animate-icon-inline">
-                  <span class="sr-only">{{ 'general.accessibility.next' | t }}</span>
-                  {%- render 'icon' with 'arrow-right', direction_aware: true -%}
-                </button>
-              </carousel-next-button>
-            </product-list>
+    {%- capture product_list -%}
+      {%- for recommendation in recommendations.products -%}
+        {%- liquid
+          assign is_umbrella_base = false
+          if recommendation.type == 'Umbrella Base' or recommendation.tags contains 'Umbrella Bases' or recommendation.tags contains 'Umbrella Base'
+            assign is_umbrella_base = true
+          endif
+          assign skip_recommendation = false
+          if is_umbrella_base and allow_umbrella_bases == false
+            assign skip_recommendation = true
+          endif
+        -%}
+        {%- unless skip_recommendation -%}
+          {%- if related_shown < related_max -%}
+            {%- assign related_shown = related_shown | plus: 1 -%}
+            {%- render 'product-card', product: recommendation, reveal: settings.stagger_products_apparition, position: related_shown, hide_product_information: section.settings.hide_product_information -%}
           {%- endif -%}
+        {%- endunless -%}
+      {%- endfor -%}
+    {%- endcapture -%}
+
+    {%- if related_shown > 0 -%}
+      <style>
+        #shopify-section-{{ section.id }} {
+          --product-list-items-per-row: {{ section.settings.products_per_row_mobile | times: 1 }};
+          --product-list-horizontal-spacing-factor: {{ section.settings.horizontal_spacing_factor }};
+          --product-list-vertical-spacing-factor: {{ section.settings.vertical_spacing_factor }};
+        }
+
+        @media screen and (min-width: 700px) {
+          #shopify-section-{{ section.id }} {
+            --product-list-items-per-row: {{ section.settings.products_per_row_desktop }};
+          }
+        }
+      </style>
+
+      {%- assign color_scheme_hash = section.settings.color_scheme.settings.background_gradient | default: section.settings.color_scheme.settings.background | md5 -%}
+
+      <div class="section-spacing color-scheme color-scheme--{{ section.settings.color_scheme.id }} color-scheme--bg-{{ color_scheme_hash }} {% if section.settings.separate_section_with_border %}bordered-section{% endif %}">
+        <div class="container">
+          <div class="section-stack">
+            {%- render 'section-header', subheading: section.settings.subheading, heading: section.settings.title, content: section.settings.content -%}
+
+            {%- if section.settings.stack_products -%}
+              <product-list class="product-list {% if section.settings.hide_product_information %}product-list--compact{% endif %} justify-center">
+                {{- product_list -}}
+              </product-list>
+            {%- else -%}
+              {%- assign carousel_id = 'carousel-' | append: section.id -%}
+
+              <product-list class="floating-controls-container floating-controls-container--inside floating-controls-container--on-hover">
+                <carousel-prev-button class="floating-controls-container__control" aria-controls="{{ carousel_id }}">
+                  <button type="button" class="prev-next-button prev-next-button--prev circle-button hover:animate-icon-inline" disabled>
+                    <span class="sr-only">{{ 'general.accessibility.previous' | t }}</span>
+                    {%- render 'icon' with 'arrow-left', direction_aware: true -%}
+                  </button>
+                </carousel-prev-button>
+
+                <scroll-carousel id="{{ carousel_id }}" group-cells allow-drag class="product-list {% if section.settings.hide_product_information %}product-list--compact{% endif %} product-list--carousel scroll-area bleed md:unbleed">
+                  {{- product_list -}}
+                </scroll-carousel>
+
+                <carousel-next-button class="floating-controls-container__control" aria-controls="{{ carousel_id }}">
+                  <button type="button" class="prev-next-button prev-next-button--next circle-button hover:animate-icon-inline">
+                    <span class="sr-only">{{ 'general.accessibility.next' | t }}</span>
+                    {%- render 'icon' with 'arrow-right', direction_aware: true -%}
+                  </button>
+                </carousel-next-button>
+              </product-list>
+            {%- endif -%}
+          </div>
         </div>
       </div>
-    </div>
+    {%- endif -%}
   {%- endif -%}
 </product-recommendations>
 

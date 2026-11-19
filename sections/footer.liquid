@@ -62,7 +62,14 @@
                 {%- when 'links' -%}
                   {%- assign menu = block.settings.menu -%}
 
-                  {%- if menu != blank and menu.links.size > 0 -%}
+                  {%- if block.settings.use_byn_shop_links -%}
+                    <div class="v-stack gap-4 sm:gap-5">
+                      {%- if block.settings.show_menu_title != blank -%}
+                        <p class="h6">{{ block.settings.menu_title | default: 'Shop' }}</p>
+                      {%- endif -%}
+                      {%- render 'byn-footer-nav' -%}
+                    </div>
+                  {%- elsif menu != blank and menu.links.size > 0 -%}
                     <div class="v-stack gap-4 sm:gap-5">
                       {%- if block.settings.show_menu_title != blank -%}
                         <p class="h6">{{ block.settings.menu_title | default: menu.title }}</p>
@@ -319,6 +326,13 @@
           "label": "t:sections.footer.blocks.links.menu",
           "info": "t:sections.footer.blocks.links.menu_info",
           "default": "footer"
+        },
+        {
+          "type": "checkbox",
+          "id": "use_byn_shop_links",
+          "label": "Use BYN shop links",
+          "default": false,
+          "info": "Curated collection links for Shade, Living, Cooking, and Recreation."
         },
         {
           "type": "checkbox",

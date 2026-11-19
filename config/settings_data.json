@@ -9,6 +9,7 @@
  */
 {
   "current": {
+    "product_image_aspect_ratio": "square",
     "section_vertical_spacing": "md",
     "product_rating_color": "#1c1c1c",
     "product_on_sale_accent": "#e32c2b",
@@ -23,6 +24,7 @@
     "text_font_size_desktop": 14,
     "button_letter_spacing": 18,
     "round_color_swatches": true,
+    "color_swatch_config": "Obsidian Black:#1a1a1a\nOyster Grey:#a3a09a\nPearl White:#f4f4f2\nBlack:#1a1a1a\nCharcoal:#333333\nWhite:#f4f4f2\nGrey:#a3a09a\nGray:#a3a09a",
     "show_vendor": false,
     "favicon": "shopify://shop_images/new_favicon.png",
     "sections": {

@@ -42,6 +42,25 @@
         "button_text": "Subscribe"
       }
     },
+    "byn-welcome-popup": {
+      "type": "byn-welcome-popup",
+      "settings": {
+        "apparition_delay": 6,
+        "show_only_on_index": true,
+        "hide_for_account_holders": true,
+        "show_only_once": true,
+        "subscribe_endpoint": "https://byn-studio.vercel.app/api/klaviyo/subscribe",
+        "coupon_code": "WELCOME100",
+        "eyebrow": "Welcome offer",
+        "title": "$100 toward your outdoor setup",
+        "content": "Join for curated shade, seating, and recreation — plus first looks at new collections.",
+        "email_placeholder": "you@email.com",
+        "button_text": "Get the code",
+        "legal_text": "$100 off orders $2,000+. Enter your email for the code. Unsubscribe anytime.",
+        "success_title": "Your code is ready.",
+        "success_content": "Use it at checkout. We'll send a short welcome note to your inbox as well."
+      }
+    },
     "privacy-banner": {
       "type": "privacy-banner",
       "disabled": true,
@@ -55,6 +74,7 @@
   "order": [
     "cart-drawer",
     "newsletter-popup",
+    "byn-welcome-popup",
     "privacy-banner"
   ]
 }
