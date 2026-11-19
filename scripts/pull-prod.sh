@@ -7,5 +7,5 @@ set -e
 cd "$(dirname "$0")/.."
 
 STORE="${SHOPIFY_STORE:-7yi0u9-ce.myshopify.com}"
-THEME="${THEME_ID:-BYN PROD}"
+THEME="${THEME_ID:-Backyard Nests}"
 shopify theme pull --store "$STORE" --theme "$THEME" "$@"
