@@ -173,6 +173,10 @@ Supported variables
               </div>
             {%- endif -%}
 
+            {%- if context == 'main_product' -%}
+              {%- render 'byn-lanai-pdp-details', product: product -%}
+            {%- endif -%}
+
           {%- when 'payment_terms' -%}
             {%- if product != blank -%}
               <payment-terms class="payment-terms">

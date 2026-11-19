@@ -74,6 +74,26 @@ only way to do it on Shopify right now.
   assign product_gallery_carousel_id = 'product-gallery-carousel-' | append: product.id | append: '-' | append: section.id
   assign filtered_indexes = null | sort
 
+  # The Lanai set uses existing, supplier-authorized media. Keep Shopify's product
+  # media order intact so its Merchant Center primary image is unaffected, but put
+  # the selected finish's play view, complete dining set, and open bench first in
+  # the storefront gallery.
+  if product.handle == 'american-heritage-lanai-8-outdoor-pool-table-set'
+    assign selected_finish = product.selected_or_first_available_variant.title | downcase
+
+    for media in product.media
+      assign media_src = media.preview_image.src
+
+      if selected_finish contains 'obsidian' and media_src contains 'lanai-set-black-2'
+        assign default_media = media
+      elsif selected_finish contains 'pearl' and media_src contains 'lanai-set-white-2'
+        assign default_media = media
+      elsif selected_finish contains 'oyster' and media_src contains 'lanai-set-grey-2'
+        assign default_media = media
+      endif
+    endfor
+  endif
+
   if product.variants.size > 1
     for media in product.media
       if media.alt contains '#' and media.alt != product.title
@@ -148,7 +168,21 @@ only way to do it on Shopify right now.
           -%}
 
           {%- for media in product.media -%}
-            <div class="product-gallery__media snap-center {% if media == default_media %}is-initial{% endif %}" data-media-type="{{ media.media_type }}" data-media-id="{{ media.id }}" role="group" aria-label="{{ 'general.accessibility.item_nth_of_count' | t: index: media.position, count: product.media.size }}" {% if filtered_indexes contains media.position %}hidden{% endif %}>
+            {%- assign gallery_media_order = media.position -%}
+            {%- if product.handle == 'american-heritage-lanai-8-outdoor-pool-table-set' -%}
+              {%- assign media_src = media.preview_image.src -%}
+              {%- if media_src contains 'lanai-set-black-2' or media_src contains 'lanai-set-white-2' or media_src contains 'lanai-set-grey-2' -%}
+                {%- assign gallery_media_order = 1 -%}
+              {%- elsif media_src contains 'lanai-set-black-4' or media_src contains 'lanai-set-white-4' or media_src contains 'lanai-set-grey-4' -%}
+                {%- assign gallery_media_order = 2 -%}
+              {%- elsif media_src contains 'lanai-set-black-6' or media_src contains 'lanai-set-white-6' or media_src contains 'lanai-set-grey-6' -%}
+                {%- assign gallery_media_order = 3 -%}
+              {%- elsif media_src contains 'lanai-set-white-Outside' -%}
+                {%- assign gallery_media_order = 4 -%}
+              {%- endif -%}
+            {%- endif -%}
+
+            <div class="product-gallery__media snap-center {% if media == default_media %}is-initial{% endif %}" style="--byn-gallery-order: {{ gallery_media_order }}" data-media-type="{{ media.media_type }}" data-media-id="{{ media.id }}" role="group" aria-label="{{ 'general.accessibility.item_nth_of_count' | t: index: media.position, count: product.media.size }}" {% if filtered_indexes contains media.position %}hidden{% endif %}>
               {%- if default_media == media -%}
                 {%- assign preload = true -%}
               {%- else -%}
@@ -228,7 +262,21 @@ only way to do it on Shopify right now.
         <product-gallery-navigation align-selected aria-controls="{{ product_gallery_carousel_id }}" class="product-gallery__thumbnail-scroller bleed md:unbleed">
           {%- if product != blank -%}
             {%- for media in product.media -%}
-              <button type="button" class="product-gallery__thumbnail" {% if filtered_indexes contains media.position %}hidden{% endif %} data-media-type="{{ media.media_type }}" data-media-position="{{ media.position }}" data-media-id="{{ media.id }}" aria-current="{% if media == default_media %}true{% else %}false{% endif %}" aria-label="{{ 'general.accessibility.go_to_item' | t: index: forloop.index | escape }}">
+              {%- assign gallery_media_order = media.position -%}
+              {%- if product.handle == 'american-heritage-lanai-8-outdoor-pool-table-set' -%}
+                {%- assign media_src = media.preview_image.src -%}
+                {%- if media_src contains 'lanai-set-black-2' or media_src contains 'lanai-set-white-2' or media_src contains 'lanai-set-grey-2' -%}
+                  {%- assign gallery_media_order = 1 -%}
+                {%- elsif media_src contains 'lanai-set-black-4' or media_src contains 'lanai-set-white-4' or media_src contains 'lanai-set-grey-4' -%}
+                  {%- assign gallery_media_order = 2 -%}
+                {%- elsif media_src contains 'lanai-set-black-6' or media_src contains 'lanai-set-white-6' or media_src contains 'lanai-set-grey-6' -%}
+                  {%- assign gallery_media_order = 3 -%}
+                {%- elsif media_src contains 'lanai-set-white-Outside' -%}
+                  {%- assign gallery_media_order = 4 -%}
+                {%- endif -%}
+              {%- endif -%}
+
+              <button type="button" class="product-gallery__thumbnail" style="--byn-gallery-order: {{ gallery_media_order }}" {% if filtered_indexes contains media.position %}hidden{% endif %} data-media-type="{{ media.media_type }}" data-media-position="{{ media.position }}" data-media-id="{{ media.id }}" aria-current="{% if media == default_media %}true{% else %}false{% endif %}" aria-label="{{ 'general.accessibility.go_to_item' | t: index: forloop.index | escape }}">
                 {{- media | image_url: width: media.preview_image.width | image_tag: sizes: '56px', widths: '56,112,168', class: 'object-contain' -}}
 
                 {%- unless media.media_type == 'image' -%}
@@ -259,7 +307,21 @@ only way to do it on Shopify right now.
       <carousel-navigation class="page-dots align-self-center {% unless mobile_controls == 'dots' %}md-max:hidden{% endunless %} {% unless desktop_layout == 'carousel_dots' %}md:hidden{% endunless %}" aria-controls="{{ product_gallery_carousel_id }}">
         {%- if product != blank -%}
           {%- for media in product.media -%}
-            <button type="button" class="tap-area" {% if filtered_indexes contains media.position %}hidden{% endif %} aria-current="{% if media == default_media %}true{% else %}false{% endif %}">
+            {%- assign gallery_media_order = media.position -%}
+            {%- if product.handle == 'american-heritage-lanai-8-outdoor-pool-table-set' -%}
+              {%- assign media_src = media.preview_image.src -%}
+              {%- if media_src contains 'lanai-set-black-2' or media_src contains 'lanai-set-white-2' or media_src contains 'lanai-set-grey-2' -%}
+                {%- assign gallery_media_order = 1 -%}
+              {%- elsif media_src contains 'lanai-set-black-4' or media_src contains 'lanai-set-white-4' or media_src contains 'lanai-set-grey-4' -%}
+                {%- assign gallery_media_order = 2 -%}
+              {%- elsif media_src contains 'lanai-set-black-6' or media_src contains 'lanai-set-white-6' or media_src contains 'lanai-set-grey-6' -%}
+                {%- assign gallery_media_order = 3 -%}
+              {%- elsif media_src contains 'lanai-set-white-Outside' -%}
+                {%- assign gallery_media_order = 4 -%}
+              {%- endif -%}
+            {%- endif -%}
+
+            <button type="button" class="tap-area" style="--byn-gallery-order: {{ gallery_media_order }}" {% if filtered_indexes contains media.position %}hidden{% endif %} aria-current="{% if media == default_media %}true{% else %}false{% endif %}">
               <span class="sr-only">{{ 'general.accessibility.go_to_item' | t: index: media.position }}</span>
             </button>
           {%- endfor -%}

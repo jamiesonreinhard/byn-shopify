@@ -6001,6 +6001,13 @@ product-rerender {
   width: 100%;
 }
 
+/* Product-specific gallery ordering is supplied by the Liquid template. */
+.product-gallery__media,
+.product-gallery__thumbnail,
+.product-gallery__thumbnail-scroller > .tap-area {
+  order: var(--byn-gallery-order, 0);
+}
+
 .product-gallery__thumbnail-list {
   flex-shrink: 0;
   max-width: 100%;
