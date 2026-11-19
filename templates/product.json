@@ -32,15 +32,6 @@
             "show_taxes_notice": false
           }
         },
-        "inventory_cQjnbe": {
-          "type": "inventory",
-          "settings": {
-            "show_in_stock_quantity": true,
-            "low_inventory_threshold": 0,
-            "show_progress_bar": true,
-            "progress_bar_max_value": 50
-          }
-        },
         "payment_terms": {
           "type": "payment_terms",
           "settings": {}
@@ -105,7 +96,6 @@
         "vendor",
         "title",
         "price",
-        "inventory_cQjnbe",
         "payment_terms",
         "separator",
         "product_variations_VKJrR6",
