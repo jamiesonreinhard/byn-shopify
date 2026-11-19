@@ -1,17 +1,25 @@
 #!/usr/bin/env bash
-# Push local theme files to BYN PROD (live theme).
-# ⚠️  This pushes DIRECTLY to the live storefront — review your changes first.
-# Run from the theme root: ./scripts/push-prod.sh
-# To push only specific files: ./scripts/push-prod.sh --only templates/product.json
+# Push a reviewed release to the confirmed BYN live theme.
+# This is intentionally fail-closed. Use only after the PDP release workflow
+# has a fresh live baseline, preview verification, and explicit authorization.
 
-set -e
+set -euo pipefail
 cd "$(dirname "$0")/.."
 
 STORE="${SHOPIFY_STORE:-7yi0u9-ce.myshopify.com}"
-THEME="${THEME_ID:-BYN PROD}"
+THEME="${THEME_ID:-150257500332}"
+"$PWD/scripts/require-clean-worktree.sh"
 
-echo "⚠️  Pushing to LIVE theme: $THEME on $STORE"
-echo "Press Ctrl+C within 5 seconds to cancel..."
-sleep 5
+if [[ "${BYN_LIVE_RELEASE_APPROVED:-}" != "1" ]]; then
+  echo "Refusing live push. Set BYN_LIVE_RELEASE_APPROVED=1 only after explicit production approval." >&2
+  exit 1
+fi
+
+if [[ -z "${BYN_RELEASE_MANIFEST:-}" || ! -f "${BYN_RELEASE_MANIFEST}" ]]; then
+  echo "Refusing live push. Set BYN_RELEASE_MANIFEST to the verified PDP release manifest." >&2
+  exit 1
+fi
+
+echo "Pushing reviewed release to live theme $THEME on $STORE."
 
 shopify theme push --store "$STORE" --theme "$THEME" "$@"
