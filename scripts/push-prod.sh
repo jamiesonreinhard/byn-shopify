@@ -8,7 +8,7 @@ cd "$(dirname "$0")/.."
 
 STORE="${SHOPIFY_STORE:-7yi0u9-ce.myshopify.com}"
 THEME="${THEME_ID:-150257500332}"
-"$PWD/scripts/require-clean-worktree.sh"
+bash "$PWD/scripts/require-clean-worktree.sh"
 
 if [[ "${BYN_LIVE_RELEASE_APPROVED:-}" != "1" ]]; then
   echo "Refusing live push. Set BYN_LIVE_RELEASE_APPROVED=1 only after explicit production approval." >&2
