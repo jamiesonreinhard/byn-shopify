@@ -829,5 +829,6 @@
         "info": "t:theme_settings.favicon.image_info"
       }
     ]
-  }
+  },
+  {"name":"Comfort Birds chat","settings":[{"type":"checkbox","id":"comfort_birds_chat_enabled","label":"Enable Comfort Birds chat","default":false}]}
 ]

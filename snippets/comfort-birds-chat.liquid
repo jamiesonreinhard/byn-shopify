@@ -1,0 +1,10 @@
+{% if settings.comfort_birds_chat_enabled %}
+<script
+  defer
+  src="{{ 'comfort-birds.js' | asset_url }}"
+  data-page="{{ request.page_type | escape }}"
+  data-comfort-birds
+  data-styles="{{ 'comfort-birds.css' | asset_url }}"
+  data-portrait="{{ 'comfort-birds-family.jpg' | asset_url }}"
+></script>
+{% endif %}
