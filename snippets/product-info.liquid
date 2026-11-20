@@ -20,6 +20,10 @@ Supported variables
 <safe-sticky class="product-info {% if center_basic_info %}product-info--center{% endif %}">
   <div class="product-info__block-list">
     {%- liquid
+      if context == 'main_product' and product.handle == 'brunswick-billiards-smash-7-0-outdoor-table-tennis-table' and product.selected_or_first_available_variant.sku == '51871150001'
+        assign show_smash_details = true
+      endif
+
       assign inside_block_group_context = false
       assign current_block_group_name = ''
 
@@ -155,7 +159,12 @@ Supported variables
           {%- when 'price' -%}
             {%- if product.selected_or_first_available_variant != nil -%}
               <div class="v-stack">
+                {% if show_smash_details %}<div class="h-stack gap-3 wrap">{% endif %}
                 {%- render 'price-list', product: product, variant: product.selected_or_first_available_variant, context: 'product' -%}
+                {%- if show_smash_details -%}
+                    <span class="text-sm text-subdued">SKU {{ product.selected_or_first_available_variant.sku | escape }}</span>
+                  </div>
+                {%- endif -%}
 
                 {%- if block.settings.show_taxes_notice -%}
                   <p class="text-sm text-subdued">
@@ -357,6 +366,13 @@ Supported variables
             -%}
 
           {%- when 'buy_buttons' -%}
+            {%- if show_smash_details -%}
+              <ul class="v-stack gap-1 text-sm" style="list-style: none; padding: 0; margin-block-end: 1rem;" role="list">
+                <li>Indoor/outdoor table · 4 mm aluminum-clad ABS deck</li>
+                <li>Open table: 108 in L × 60 in W × 30 in H</li>
+                <li>Included: net, post clamps and a ball-and-paddle set.</li>
+              </ul>
+            {%- endif -%}
             {%- render 'buy-buttons',
                 product: product,
                 form_id: product_form_id,
@@ -430,6 +446,9 @@ Supported variables
             {%- if block.settings.text != blank -%}
               <div class="prose">
                 {{- block.settings.text -}}
+                {%- if show_smash_details and block.settings.text contains 'tel:' and product.description contains 'id="smash-freight"' -%}
+                  <p><a href="#smash-freight">Freight delivery details</a></p>
+                {%- endif -%}
               </div>
             {%- endif -%}
 
