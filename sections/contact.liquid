@@ -48,6 +48,37 @@
 
           {%- assign label = 'contact.form.message' | t -%}
           {%- render 'input', name: 'contact[body]', label: label, multiline: 4, required: true -%}
+          {%- if request.page_type == 'page' and page.handle == 'contact' -%}
+            {%- assign sms_consent = 'Yes, Backyard Nests may text me at the mobile number below to answer my questions, share order updates, and coordinate delivery or pickup. Message frequency varies. Message and data rates may apply. Reply STOP to opt out or HELP for help. Consent is optional and is not a condition of purchase.' -%}
+            <fieldset id="sms-consent" class="fieldset text-start scroll-margin-offset">
+              <legend class="h5">Text updates (optional)</legend>
+              <div class="checkbox-control">
+                <input id="sms-opt-in-{{ section.id }}" name="contact[Support SMS consent]" class="checkbox" type="checkbox" value="{{ sms_consent | escape }}">
+                <label for="sms-opt-in-{{ section.id }}">{{ sms_consent }}</label>
+              </div>
+              <div class="form-control">
+                <label for="sms-mobile-{{ section.id }}">Mobile number for text updates</label>
+                <input id="sms-mobile-{{ section.id }}" class="input" type="tel" autocomplete="tel" name="contact[Support SMS mobile number]">
+              </div>
+              <p class="text-sm"><a class="link" href="{{ shop.privacy_policy.url }}">Privacy policy</a> · <a class="link" href="{{ shop.terms_of_service.url }}">Terms of service</a></p>
+            </fieldset>
+            <script>
+              (() => {
+                const fields = document.currentScript.previousElementSibling;
+                const consent = fields.querySelector('[type="checkbox"]');
+                const phone = fields.querySelector('[type="tel"]');
+                function updatePhoneRequirement() {
+                  phone.required = consent.checked;
+                  phone.setCustomValidity(consent.checked && phone.value.replace(/\D/g, '').length < 7
+                    ? 'Enter a mobile number to receive text updates.' : '');
+                }
+                consent.addEventListener('change', updatePhoneRequirement);
+                phone.addEventListener('input', updatePhoneRequirement);
+                window.addEventListener('pageshow', updatePhoneRequirement);
+                updatePhoneRequirement();
+              })();
+            </script>
+          {%- endif -%}
         </div>
 
         {%- assign button_content = 'contact.form.submit' | t -%}
