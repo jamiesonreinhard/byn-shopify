@@ -3,6 +3,7 @@
   defer
   src="{{ 'comfort-birds.js' | asset_url }}"
   data-page="{{ request.page_type | escape }}"
+  {% unless customer %}data-welcome-eligible="true"{% endunless %}
   data-comfort-birds
   data-styles="{{ 'comfort-birds.css' | asset_url }}"
   data-portrait="{{ 'comfort-birds-family.jpg' | asset_url }}"
