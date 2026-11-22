@@ -4,6 +4,7 @@
   src="{{ 'comfort-birds.js' | asset_url }}"
   data-page="{{ request.page_type | escape }}"
   {% unless customer %}data-welcome-eligible="true"{% endunless %}
+  {% if settings.comfort_birds_welcome_bubble %}data-welcome-bubble="true"{% endif %}
   data-comfort-birds
   data-styles="{{ 'comfort-birds.css' | asset_url }}"
   data-portrait="{{ 'comfort-birds-family.jpg' | asset_url }}"
