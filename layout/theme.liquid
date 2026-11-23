@@ -110,6 +110,12 @@
         {%- sections 'footer-group' -%}
       {%- endif -%}
     </main>
+    {% unless request.design_mode %}
+      {% case request.page_type %}
+        {% when 'index', 'product', 'collection', 'list-collections', 'page', 'blog', 'article', 'policy', 'cart', 'search' %}
+          <script defer src="{{ 'storefront-analytics.js' | asset_url }}" data-project="phc_oHXNXwb62PuPwYoEv8MNKj3YBcxEUjPtKBYcdomV7TjG" data-page-type="{{ request.page_type }}" data-canonical="{{ canonical_url | escape }}"></script>
+      {% endcase %}
+    {% endunless %}
     {% render 'comfort-birds-chat' %}
   </body>
 </html>
