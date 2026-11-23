@@ -35,6 +35,16 @@
     }).catch(() => {});
   }
 
+  // The widget shares the consent check and anonymous visitor with storefront analytics.
+  window.bynChatAnalytics = {
+    visitorId: () => permitted() ? visitor : undefined,
+    capture(event, details) {
+      if (!permitted() || !visitor) return false;
+      capture(event, { ...details, viewport: matchMedia('(max-width: 640px)').matches ? 'mobile' : 'desktop' });
+      return true;
+    }
+  };
+
   function refresh() {
     if (!permitted()) {
       viewed = false;
@@ -51,6 +61,7 @@
     }
     capture('$pageview');
     viewed = true;
+    window.dispatchEvent(new Event('byn:analytics-ready'));
   }
 
   document.addEventListener('click', event => {
